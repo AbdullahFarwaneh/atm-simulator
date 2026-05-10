@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class ATM {
 
-    private final Bank    bank;
+    private final Bank bank;
     private final Scanner scanner = new Scanner(System.in);
     private Account currentAccount;
 
@@ -19,12 +19,13 @@ public class ATM {
         }
     }
 
-    // ── Login ─────────────────────────────────────────────────────────────────
+
     private boolean login() {
         System.out.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.print("  Enter Account Number (or 'exit'): ");
         String number = scanner.nextLine().trim();
         if (number.equalsIgnoreCase("exit")) System.exit(0);
+        currentAccount = bank.findAccount(number);
 
         System.out.print("  Enter PIN: ");
         String pin = scanner.nextLine().trim();
@@ -39,7 +40,7 @@ public class ATM {
         }
     }
 
-    // ── Session ───────────────────────────────────────────────────────────────
+
     private void session() {
         boolean running = true;
         while (running) {
@@ -63,7 +64,7 @@ public class ATM {
         }
     }
 
-    // ── Handlers ─────────────────────────────────────────────────────────────
+
     private void handleBalance() {
         System.out.println("  ── Account Summary ──────────────────");
         currentAccount.printSummary();
@@ -96,7 +97,10 @@ public class ATM {
         var history = currentAccount.getHistory();
         System.out.println("  ── Transaction History ──────────────");
         if (history.isEmpty()) { System.out.println("  No transactions yet."); return; }
-        history.forEach(System.out::println);
+        for(Transaction t : history){
+            System.out.println(t);
+
+        }
     }
 
     private void handleInterest() {
@@ -108,7 +112,7 @@ public class ATM {
         }
     }
 
-    // ── UI ────────────────────────────────────────────────────────────────────
+
     private void printMenu() {
         System.out.println("\n  ── " + currentAccount.getAccountType() + " Account Menu ──────────");
         System.out.println("  [1] Check Balance");
